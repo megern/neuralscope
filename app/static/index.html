@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>NeuralScope · Research workbench</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="/static/config.js" defer></script>
+    <script src="/static/data.js" defer></script>
+    <script src="/static/workbench.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <span class="badge">Local CPU research · v0.2.0</span>
+      <h1>NeuralScope</h1>
+      <p>Train a transparent local model and explain its held-out behavior.</p>
+      <a href="/docs">API documentation</a> · <a href="/guide">User guide</a>
+    </header>
+    <main>
+      <section>
+        <h2>1. Bring your data</h2>
+        <p>Which columns does this linear model rely on?</p>
+        <button id="load-example" class="secondary">
+          Load synthetic example</button
+        ><button id="sample-csv" class="secondary">Download sample CSV</button
+        ><label for="csv-file">Import CSV (up to 2 MiB)</label
+        ><input id="csv-file" type="file" accept=".csv,text/csv" />
+        <p id="source-label" class="hint"></p>
+        <div class="scroll" id="preview"></div>
+        <p id="preview-note" class="hint"></p>
+      </section>
+      <section>
+        <h2>2. Map columns and settings</h2>
+        <div id="mapping"></div>
+        <div class="fields">
+          <div>
+            <label for="param-test_fraction">Held-out fraction</label
+            ><input
+              type="number"
+              id="param-test_fraction"
+              min="0.1"
+              max="0.5"
+              value="0.25"
+              step="any"
+              required
+            />
+          </div>
+          <div>
+            <label for="param-repeats">Permutation repeats</label
+            ><input
+              type="number"
+              id="param-repeats"
+              min="1"
+              max="100"
+              value="10"
+              step="1"
+              required
+            />
+          </div>
+          <div>
+            <label for="param-seed">Random seed</label
+            ><input
+              type="number"
+              id="param-seed"
+              min="0"
+              max="4294967295"
+              value="42"
+              step="1"
+              required
+            />
+          </div>
+        </div>
+        <p class="hint">
+          Ordinary least squares with preprocessing fitted on training rows
+          only. Random holdout assumes independent rows; this does not explain
+          an uploaded neural network.
+        </p>
+        <button id="run">Train and explain</button>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </section>
+      <section class="full" id="results" hidden>
+        <h2>3. Read the evidence</h2>
+        <div id="metrics" class="metrics"></div>
+        <p id="interpretation"></p>
+        <h3 id="chart-title"></h3>
+        <canvas id="chart" role="img"></canvas>
+        <div class="scroll" id="result-table"></div>
+        <p id="table-note" class="hint"></p>
+        <h3>Assumptions and limits</h3>
+        <p id="assumptions" class="hint"></p>
+        <button id="export-result" disabled>Export result report (JSON)</button
+        ><button id="export-config" disabled class="secondary">
+          Export replayable input (JSON)
+        </button>
+        <p class="hint">
+          Exports are local downloads. Replayable input includes selected data:
+          review it before sharing.
+        </p>
+        <details>
+          <summary>Exact API response</summary>
+          <pre id="raw"></pre>
+        </details>
+      </section>
+    </main>
+    <footer>
+      Runs in your local service without external model calls. Synthetic
+      examples demonstrate behavior; imported data are not independently
+      verified. No results are saved by the service.
+    </footer>
+  </body>
+</html>
