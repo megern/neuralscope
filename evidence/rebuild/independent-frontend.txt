@@ -1,0 +1,33 @@
+TAP version 13
+# PASS quoted-empty single-column record preserved then rejected as missing numeric
+# PASS trailing quoted-empty record at EOF preserved
+# PASS whitespace-only field is data, not a blank physical line
+# PASS truly empty physical lines ignored while delimiter-empty rows retained
+# PASS quoted comma, multiline, escaped quote and CRLF
+# PASS BOM header parsed
+# PASS duplicate headers rejected
+# PASS ragged row actionable
+# PASS unclosed quoted field rejected
+# PASS empty matrix row not silently dropped
+# PASS blank physical lines ignored
+# PASS missing numeric value is an error
+# PASS nonfinite and oversized numbers rejected
+# PASS scientific notation and decimal values
+# PASS hostile text remains plain CSV text
+# PASS synthetic CSV produces actual API request
+# 16 frontend checks passed for NeuralScope
+# Subtest: /Users/a2/Documents/Codex/2026-10-13/ai-open-source-venture-lab-36/outputs/repos/neuralscope/tools/test_ui.mjs
+ok 1 - /Users/a2/Documents/Codex/2026-10-13/ai-open-source-venture-lab-36/outputs/repos/neuralscope/tools/test_ui.mjs
+  ---
+  duration_ms: 35.699708
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 41.21875

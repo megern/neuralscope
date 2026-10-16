@@ -1,0 +1,134 @@
+[
+  {
+    "sha256": "26ea89ace3fb57ab8f4850c08ab4249a24921f860fd4a224ed9a44c9b4fdf045",
+    "path": ".dockerignore"
+  },
+  {
+    "sha256": "9ec1ba0e53cf5d87c8c728b9f40992f061ec40bbbb59ef244faace6893ee3c80",
+    "path": ".github/workflows/ci.yml"
+  },
+  {
+    "sha256": "695874136675be1402d6ee3696680669e0a8bc74c0fd305cba7675be1b0f27f5",
+    "path": ".gitignore"
+  },
+  {
+    "sha256": "cc61fc147a0795314f5878354f90b353b71f6c1cdbba30f0a3e261a00f2bbfef",
+    "path": ".gitleaks.toml"
+  },
+  {
+    "sha256": "11e7bdd058b64cd74b6fe90a9687e6a9e4a5644139e2c5bdc4d27e7e1051b944",
+    "path": "Dockerfile"
+  },
+  {
+    "sha256": "731e1cfa5bf38bcc3036f387dcb40d8fc21e5c63ffd53cc92c2f55e02df5876e",
+    "path": "LICENSE"
+  },
+  {
+    "sha256": "e9536990353e306a712af10a72cb1f5894635095d9606862b30f8c8e60a320bf",
+    "path": "README.md"
+  },
+  {
+    "sha256": "efc4c56daaa1557f683b85915bf8e1986032e43db42c66a0f96b7e93dfaadf35",
+    "path": "SECURITY.md"
+  },
+  {
+    "sha256": "072aaed889a6e22143c2f2a0cb817ee3391c7a8374894592601f72b8926ec50a",
+    "path": "app/USER_GUIDE.md"
+  },
+  {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "path": "app/__init__.py"
+  },
+  {
+    "sha256": "d1eda2150e58503114c6cf4ba36d5958aa7e2cfbb496fc0d8026b5c9da4beb77",
+    "path": "app/guard.py"
+  },
+  {
+    "sha256": "a9b3bb4ef58e2010951adf66187b3eae8014cb8a5aa15de23576f79715126378",
+    "path": "app/main.py"
+  },
+  {
+    "sha256": "414bd67ceec5d5ef078e800dc6494e640f61a4cef78c3445b2ea06b13ea76b62",
+    "path": "app/static/config.js"
+  },
+  {
+    "sha256": "c12a15bcb1b73fafcf4a5484562b0ccdf657fc53933596222b79c8fdf9dd53c0",
+    "path": "app/static/data.js"
+  },
+  {
+    "sha256": "46bb7b668ac0ffa9ef38eff91ec9528d199580b6c09596f54a65904030e42277",
+    "path": "app/static/index.html"
+  },
+  {
+    "sha256": "2f18278b89e88530bfd63e93255cf54725bf3c54ea633429ba4bcb909ee4220f",
+    "path": "app/static/style.css"
+  },
+  {
+    "sha256": "c0acf47d1231da72d47898ae7699eebd047f271c60ff5cc41feed07107af2aec",
+    "path": "app/static/workbench.js"
+  },
+  {
+    "sha256": "908db17023fde21d48829b52e9540899cfda4e230c935a744cda2899f400e0a4",
+    "path": "compose.yaml"
+  },
+  {
+    "sha256": "072aaed889a6e22143c2f2a0cb817ee3391c7a8374894592601f72b8926ec50a",
+    "path": "docs/USER_GUIDE.md"
+  },
+  {
+    "sha256": "967a8bf443ff5e0e2141c231e0cb104bcb9ab5be5f8324ab492d60a2a32e7f58",
+    "path": "examples/synthetic.csv"
+  },
+  {
+    "sha256": "ea6e9b52ca6078f9e375b459dcb246382b55909590afbd75bdab4b81200ddd2a",
+    "path": "examples/synthetic.json"
+  },
+  {
+    "sha256": "5088d05460641ae9b47a93f326be94542e58b6b5ecd3e34ec8ddf4b535540efe",
+    "path": "pyproject.toml"
+  },
+  {
+    "sha256": "3e9fb16204447836fb946dd77126b42b5c249acbee4a1dd44779ba21ab2af810",
+    "path": "requirements-dev.in"
+  },
+  {
+    "sha256": "1772cbb02ab55452bd0f2eeb4b0c6284dd0e1aad143c30808ba0364a6cf0a982",
+    "path": "requirements-dev.lock"
+  },
+  {
+    "sha256": "cc2d915f3530f2b16ab605d633b94e6c8784ee70f799daf639dd30deef2361de",
+    "path": "requirements-dev.txt"
+  },
+  {
+    "sha256": "8072f19ef12d8c6b0a96a5370cdcda5f45a7df6f9ddfd45b04bfada32cc06ba6",
+    "path": "requirements.lock"
+  },
+  {
+    "sha256": "b79df5cfcf2453521503bda40355b48186a38a1ab1abd6bcf86869c53673d0c2",
+    "path": "requirements.txt"
+  },
+  {
+    "sha256": "83d35cd61751763bfdb19cb53d55de4666466f4a25acd777bac39a75d314bd5f",
+    "path": "tests/test_core.py"
+  },
+  {
+    "sha256": "29acf3115d6a6576e4623231658668254c3633666ef3660b206cf2f5587d7780",
+    "path": "tests/test_input_limits.py"
+  },
+  {
+    "sha256": "4cf04db2f032e8bc09aeaf06351625ef9a1a71311c991a72c6ec6b56e61aa6a6",
+    "path": "tests/test_rebuild.py"
+  },
+  {
+    "sha256": "e8cba95add94b2f1c48e2b4148471b327d1aa134531ffdf2d550f9cd6cad9d8a",
+    "path": "tests/test_review.py"
+  },
+  {
+    "sha256": "ecedd0d5c9208a193cea960d43f084b49acd0a0dcd20e709cb2c755675769fd3",
+    "path": "tools/smoke.py"
+  },
+  {
+    "sha256": "cf196427b19700a42474a4a9317f646ba758c8549c05967c88d58ff9d98ec18f",
+    "path": "tools/test_ui.mjs"
+  }
+]

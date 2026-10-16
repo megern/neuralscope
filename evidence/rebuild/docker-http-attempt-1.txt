@@ -1,0 +1,50 @@
+{
+  "synthetic": true,
+  "http_status": 200,
+  "invalid_input_status": 422,
+  "latency_ms": [
+    16.554708126932383,
+    2.8097080066800117,
+    3.684957977384329
+  ],
+  "result": {
+    "held_out_mse": 6.851820433919646e-29,
+    "held_out_r2": 1.0,
+    "train_rows": 23,
+    "test_rows": 7,
+    "test_indices": [
+      29,
+      16,
+      7,
+      25,
+      24,
+      22,
+      5
+    ],
+    "predictions": [
+      89.00000000000001,
+      50.00000000000001,
+      23.000000000000004,
+      77.00000000000001,
+      74.0,
+      68.0,
+      16.999999999999996
+    ],
+    "intercept": 1.999999999999993,
+    "importance": [
+      {
+        "feature": "trend",
+        "mse_increase": 1571.9142857142858,
+        "std": 561.0937867692177,
+        "coefficient": 3.0000000000000004
+      },
+      {
+        "feature": "noise",
+        "mse_increase": 2.884977024808268e-30,
+        "std": 1.8550144279886605e-29,
+        "coefficient": 8.416176382284936e-16
+      }
+    ],
+    "limitations": "Random holdout assumes independent observations; use chronological evaluation for time series. Linear model explains association, not causation. Correlated features can dilute permutation importance. All preprocessing is fit only on training rows."
+  }
+}
