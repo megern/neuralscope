@@ -1,3 +1,11 @@
+# Version 0.3.0 review
+
+Inspect bounded held-out prediction/residual diagnostics, original row indices, global worst cases and prediction scatter.
+
+The independent automated review, source fingerprints, regression outcomes and remaining limitations are recorded in [the versioned review](evidence/improvements-0.3/independent-review.json). Local and Docker gate evidence is versioned in the same directory. This is a local single-user release candidate until the matching protected-branch CI and tag checks pass. The prior review below applies to 0.2.0 only.
+
+---
+
 # Independent quality review — neuralscope v0.2.0
 
 **Status: LOCAL_CANDIDATE_PASS.** Local functional review checkpoint; status depends on current build/security gates and is not an approved published release.

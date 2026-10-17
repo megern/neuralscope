@@ -1,4 +1,5 @@
 import math
+from .guard import InputGuard
 import numpy as np
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
@@ -82,7 +83,36 @@ def analyze(req: Request):
                 "coefficient": float(beta[j + 1] / scale[j]),
             }
         )
+    residuals = y[test] - prediction
+    absolute_errors = np.abs(residuals)
+
+    def diagnostic(index):
+        return {
+            "row_index": int(test[index]),
+            "actual": float(y[test[index]]),
+            "predicted": float(prediction[index]),
+            "residual": float(residuals[index]),
+            "absolute_error": float(absolute_errors[index]),
+        }
+
+    diagnostic_limit = 1000
+    worst = np.argsort(-absolute_errors, kind="stable")[:20]
     return {
+        "diagnostic_summary": {
+            "evaluated_rows": len(test),
+            "reported_rows": min(len(test), diagnostic_limit),
+            "diagnostic_limit": diagnostic_limit,
+            "truncated": len(test) > diagnostic_limit,
+            "mean_absolute_error": float(absolute_errors.mean()),
+            "median_absolute_error": float(np.median(absolute_errors)),
+            "max_absolute_error": float(absolute_errors.max()),
+            "mean_residual": float(residuals.mean()),
+            "residual_definition": "actual minus predicted; positive values mean underprediction",
+        },
+        "held_out_diagnostics": [
+            diagnostic(i) for i in range(min(len(test), diagnostic_limit))
+        ],
+        "worst_cases": [diagnostic(int(i)) for i in worst],
         "held_out_mse": mse,
         "held_out_r2": (
             1 - float(np.sum((prediction - y[test]) ** 2)) / variance
@@ -99,7 +129,7 @@ def analyze(req: Request):
     }
 
 
-app = FastAPI(title="NeuralScope", version="0.2.0")
+app = FastAPI(title="NeuralScope", version="0.3.0")
 
 
 STATIC = Path(__file__).parent / "static"
@@ -143,7 +173,5 @@ def run_analysis(req: Request):
     except (ValueError, np.linalg.LinAlgError, OverflowError) as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
-
-from .guard import InputGuard
 
 app.add_middleware(InputGuard)

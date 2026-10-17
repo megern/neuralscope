@@ -1,0 +1,24 @@
+{
+  "reviewer": "build_enterprise independent reviewer",
+  "version": "0.3.0",
+  "checked_at_utc": "2026-10-17T02:36:38.391248+00:00",
+  "url": "http://127.0.0.1:18208",
+  "synthetic": true,
+  "scope": "Actual HTTP functional and error-path checks. This is not a browser rendering or Docker source-identity claim.",
+  "checks": [
+    "Actual service advertises API version0.3.0",
+    "Running service guide bytes match current reviewed local guide",
+    "Root HTML and every served static asset match current reviewed source bytes",
+    "Held-out diagnostics preserve original row/target identities and expected near-zero linear-model error"
+  ],
+  "guide_sha256": "47cba6862140a48ec5ce5515ec1348da54829468f19569cc2afc23119c7a85b8",
+  "served_assets_sha256": {
+    "/static/config.js": "fd7384538d276611392e8a970da913418b2d330556a2a244fa1e4e4c84e1fb43",
+    "/static/data.js": "c12a15bcb1b73fafcf4a5484562b0ccdf657fc53933596222b79c8fdf9dd53c0",
+    "/static/diagnostic-chart.js": "dbd4e89c53662deba0f51cbe2409e2eadc1a594693924e844e7ce5527e40c53e",
+    "/static/index.html": "0bc0f0bb02be0669878f6050df46e2d66865c12a9507619d8f75f7bac988ba9a",
+    "/static/style.css": "2f18278b89e88530bfd63e93255cf54725bf3c54ea633429ba4bcb909ee4220f",
+    "/static/workbench.js": "1820e97ba7919420747e0f2758eafc591a4eab8c1e1a154c811176b7ffe1d8d6"
+  },
+  "status": "PASS"
+}

@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="/static/style.css" />
     <script src="/static/config.js" defer></script>
     <script src="/static/data.js" defer></script>
+    <script src="/static/diagnostic-chart.js" defer></script>
     <script src="/static/workbench.js" defer></script>
   </head>
   <body>
     <header>
-      <span class="badge">Local CPU research · v0.2.0</span>
+      <span class="badge">Local CPU research · v0.3.0</span>
       <h1>NeuralScope</h1>
       <p>Train a transparent local model and explain its held-out behavior.</p>
       <a href="/docs">API documentation</a> · <a href="/guide">User guide</a>
@@ -86,6 +87,11 @@
         <canvas id="chart" role="img"></canvas>
         <div class="scroll" id="result-table"></div>
         <p id="table-note" class="hint"></p>
+        <h3>Held-out prediction diagnostics</h3>
+        <p id="diagnostic-summary"></p>
+        <canvas id="diagnostic-chart" role="img"></canvas>
+        <h3>Largest held-out absolute errors (at most 20)</h3>
+        <div class="scroll" id="diagnostic-table"></div>
         <h3>Assumptions and limits</h3>
         <p id="assumptions" class="hint"></p>
         <button id="export-result" disabled>Export result report (JSON)</button
