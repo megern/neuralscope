@@ -54,7 +54,7 @@ function loadCSV(text, label) {
     table(
       $("preview"),
       ["Row", ...data.headers],
-      data.rows.slice(0, 8).map((row, i) => [i + 1, ...row])
+      data.rows.slice(0, 8).map((row, i) => [i + 1, ...row]),
     );
     $("preview-note").textContent =
       `${data.rows.length} rows × ${data.headers.length} columns. Preview shows first eight. Row order is preserved.`;
@@ -107,7 +107,7 @@ function parameters() {
     const input = $("param-" + key);
     if (!input.checkValidity())
       throw Error(
-        `Check ${input.labels[0].textContent}: use a value between ${input.min} and ${input.max}.`
+        `Check ${input.labels[0].textContent}: use a value between ${input.min} and ${input.max}.`,
       );
     values[key] = Number(input.value);
   });
@@ -119,7 +119,7 @@ function mapping() {
   cfg.mapping.forEach(([key]) => (map[key] = $("map-" + key).value));
   if (cfg.multi)
     map[cfg.multi[0]] = Array.from(
-      document.querySelectorAll(`input[name="${cfg.multi[0]}"]:checked`)
+      document.querySelectorAll(`input[name="${cfg.multi[0]}"]:checked`),
     ).map((i) => i.value);
   return map;
 }
@@ -177,7 +177,7 @@ function plot(title, series, labels = []) {
   const count = Math.max(...series.map((s) => s.values.length));
   const point = (index, value) => [
     85 + (index / Math.max(1, count - 1)) * 785,
-    25 + ((high - value) / (high - low)) * 208
+    25 + ((high - value) / (high - low)) * 208,
   ];
   series.forEach((s, j) => {
     ctx.strokeStyle = colors[j % 3];
@@ -202,7 +202,7 @@ function plot(title, series, labels = []) {
     title +
       ". " +
       series.map((s) => s.name).join(", ") +
-      ". Exact values are in the results table and exported report."
+      ". Exact values are in the results table and exported report.",
   );
 }
 function bars(title, rows) {
@@ -226,7 +226,7 @@ function bars(title, rows) {
   });
   canvas.setAttribute(
     "aria-label",
-    title + ". Exact values are in the table below."
+    title + ". Exact values are in the table below.",
   );
 }
 function render(result, input) {
@@ -239,17 +239,17 @@ function render(result, input) {
       ["Total net return", percent(result.total_return)],
       ["Maximum drawdown", percent(result.max_drawdown)],
       ["Sharpe", format(result.sharpe)],
-      ["Position turnover", format(result.turnover)]
+      ["Position turnover", format(result.turnover)],
     ]);
     plot("Compounded strategy equity", [
-      { name: "Net equity (starts at 1)", values: result.equity }
+      { name: "Net equity (starts at 1)", values: result.equity },
     ]);
     headers = ["Period", "Lagged exposure", "Net return", "Equity"];
     rows = result.net_returns.map((r, i) => [
       i + 1,
       format(result.positions[i]),
       percent(r),
-      format(result.equity[i + 1])
+      format(result.equity[i + 1]),
     ]);
     interpretation = `The supplied rule ${result.total_return >= 0 ? "gained" : "lost"} ${percent(Math.abs(result.total_return))} after stated turnover costs. The largest decline from a previous equity peak was ${percent(result.max_drawdown)}. Compare against an appropriate benchmark before drawing an investment conclusion. Costs summed across periods: ${percent(result.total_cost_fraction)} of period capital; this is not a compounded return deduction.`;
   }
@@ -257,12 +257,12 @@ function render(result, input) {
     metrics([
       ["Adjusted treatment coefficient", format(result.treatment_effect)],
       ["HC1 standard error", format(result.robust_standard_error)],
-      ["Poor overlap observations", percent(result.poor_overlap_fraction)]
+      ["Poor overlap observations", percent(result.poor_overlap_fraction)],
     ]);
     bars("Treatment coefficient and approximate interval", [
       ["Lower interval", result.approximate_95_percent_interval[0]],
       ["Coefficient", result.treatment_effect],
-      ["Upper interval", result.approximate_95_percent_interval[1]]
+      ["Upper interval", result.approximate_95_percent_interval[1]],
     ]);
     headers = ["Diagnostic", "Value"];
     rows = [
@@ -270,15 +270,15 @@ function render(result, input) {
         "Approximate 95% interval",
         result.approximate_95_percent_interval
           .map((v) => format(v))
-          .join(" to ")
+          .join(" to "),
       ],
       ["Propensity min", format(result.propensity_range[0])],
       ["Propensity max", format(result.propensity_range[1])],
       [
         "Overlap warning",
         result.warnings.join("; ") ||
-          "No threshold warning (does not prove positivity)"
-      ]
+          "No threshold warning (does not prove positivity)",
+      ],
     ];
     interpretation = `The additive outcome model estimates a treatment coefficient of ${format(result.treatment_effect)} in outcome units, after adjustment for selected columns. The approximate interval ${result.approximate_95_percent_interval[0] <= 0 && result.approximate_95_percent_interval[1] >= 0 ? "includes" : "excludes"} zero. ${result.warnings.length ? result.warnings.join(". ") : "Observed propensity scores do not trigger the configured extreme-score warning."} This is an observational model result, not proof of a causal effect.`;
   }
@@ -287,24 +287,45 @@ function render(result, input) {
       ["Held-out MSE", format(result.held_out_mse)],
       ["Held-out R²", format(result.held_out_r2)],
       ["Training rows", result.train_rows],
-      ["Held-out rows", result.test_rows]
+      ["Held-out rows", result.test_rows],
     ]);
     bars(
       "Held-out permutation importance (MSE increase)",
-      result.importance.map((r) => [r.feature, r.mse_increase])
+      result.importance.map((r) => [r.feature, r.mse_increase]),
     );
     headers = [
       "Feature",
       "MSE increase",
       "Repeat spread (SD)",
-      "Linear coefficient"
+      "Linear coefficient",
     ];
     rows = result.importance.map((r) => [
       r.feature,
       format(r.mse_increase),
       format(r.std),
-      format(r.coefficient)
+      format(r.coefficient),
     ]);
+    const diagnostics = result.diagnostic_summary;
+    $("diagnostic-summary").textContent =
+      `Across all ${diagnostics.evaluated_rows} held-out rows: mean absolute error ${format(diagnostics.mean_absolute_error)}, median absolute error ${format(diagnostics.median_absolute_error)}, maximum absolute error ${format(diagnostics.max_absolute_error)}, mean residual ${format(diagnostics.mean_residual)}. Residual = actual − predicted; positive means underprediction. Scatter shows ${diagnostics.reported_rows} rows${diagnostics.truncated ? " (first 1,000 held-out rows only)" : ""}. Worst cases below are selected across the entire held-out set.`;
+    LabDiagnosticChart.draw($("diagnostic-chart"), result.held_out_diagnostics);
+    table(
+      $("diagnostic-table"),
+      [
+        "Original data row (1-based)",
+        "Actual",
+        "Predicted",
+        "Residual",
+        "Absolute error",
+      ],
+      result.worst_cases.map((row) => [
+        row.row_index + 1,
+        format(row.actual),
+        format(row.predicted),
+        format(row.residual),
+        format(row.absolute_error),
+      ]),
+    );
     const first = result.importance[0];
     interpretation = `${first.feature} has the largest mean held-out permutation MSE increase (${format(first.mse_increase)}). Positive importance means shuffling degraded this model’s predictions; near-zero or negative values can reflect weak signal, redundancy, or sampling noise. Coefficients describe this local linear fit. R² ${result.held_out_r2 === null ? "is undefined for a constant held-out target" : format(result.held_out_r2) + " can be negative when prediction is worse than the held-out target mean"}.`;
   }
@@ -313,11 +334,11 @@ function render(result, input) {
       ["Holdout MAE", format(result.mae)],
       ["Holdout RMSE", format(result.rmse)],
       ["Flagged holdout values", result.anomalies.length],
-      ["Training residual scale", format(result.training_residual_scale)]
+      ["Training residual scale", format(result.training_residual_scale)],
     ]);
     plot("Holdout: unseen actual values versus fixed-origin forecast", [
       { name: "Holdout actual", values: result.holdout_actual },
-      { name: "Holdout forecast", values: result.holdout_prediction }
+      { name: "Holdout forecast", values: result.holdout_prediction },
     ]);
     headers = ["Holdout row", "Actual", "Forecast", "Residual", "Flag"];
     const offset = input.values.length - input.holdout;
@@ -326,7 +347,7 @@ function render(result, input) {
       format(v),
       format(result.holdout_prediction[i]),
       format(v - result.holdout_prediction[i]),
-      result.anomalies.some((a) => a.index === offset + i) ? "Inspect" : "—"
+      result.anomalies.some((a) => a.index === offset + i) ? "Inspect" : "—",
     ]);
     rows.push(
       ...result.future_forecast.map((v, i) => [
@@ -334,8 +355,8 @@ function render(result, input) {
         "Unavailable",
         format(v),
         "Unavailable",
-        "Not evaluated"
-      ])
+        "Not evaluated",
+      ]),
     );
     interpretation = `${input.method} produced an average absolute holdout error of ${format(result.mae)} value units. ${result.anomalies.length} holdout residuals exceed the training-calibrated threshold. Inspect flagged rows for data issues or regime changes; long-horizon uncertainty can also create flags. Future values are projections from all supplied observations and have not been evaluated.`;
   }
@@ -351,7 +372,7 @@ function render(result, input) {
 function download(name, value, type = "application/json") {
   const blob = new Blob(
     [typeof value === "string" ? value : JSON.stringify(value, null, 2)],
-    { type }
+    { type },
   );
   const url = URL.createObjectURL(blob),
     link = element("a");
@@ -396,19 +417,19 @@ $("run").onclick = async () => {
     const input = LabData.payload(cfg.slug, data, selected, settings);
     if (new TextEncoder().encode(JSON.stringify(input)).length > 2097152)
       throw Error(
-        "Analysis request exceeds 2 MiB. Reduce rows or selected columns."
+        "Analysis request exceeds 2 MiB. Reduce rows or selected columns.",
       );
     button.disabled = true;
     status("Running local analysis…");
     const response = await fetch("/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(input)
+      body: JSON.stringify(input),
     });
     const result = await response.json();
     if (requestRevision !== revision)
       throw Error(
-        "Inputs changed during analysis. Run again with the current settings."
+        "Inputs changed during analysis. Run again with the current settings.",
       );
     if (!response.ok) {
       const detail = Array.isArray(result.detail)
@@ -423,7 +444,7 @@ $("run").onclick = async () => {
     analysisSnapshot = { columns: selected, parameters: settings };
     render(result, input);
     status(
-      "Analysis finished. Review method assumptions before interpreting these results."
+      "Analysis finished. Review method assumptions before interpreting these results.",
     );
     $("results").scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
@@ -439,11 +460,11 @@ $("export-result").onclick = () => {
   if (lastResult)
     download(cfg.slug + "-report.json", {
       application: cfg.title,
-      version: "0.2.0",
+      version: "0.3.0",
       data_source: $("source-label").textContent,
       created_at: new Date().toISOString(),
       configuration: analysisSnapshot,
-      result: lastResult
+      result: lastResult,
     });
 };
 $("export-config").onclick = () => {
@@ -453,6 +474,6 @@ document.querySelectorAll("#mapping,.fields").forEach((container) =>
   container.addEventListener("input", () => {
     invalidate();
     status("Settings changed. Run analysis again to refresh results.");
-  })
+  }),
 );
 loadCSV(cfg.sample, "Synthetic demonstration dataset");

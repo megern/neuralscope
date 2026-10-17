@@ -1,0 +1,49 @@
+{
+  "application": "neuralscope",
+  "version": "0.3.0",
+  "recorded_at_utc": "2026-10-16T22:00:10.362675+00:00",
+  "role": "Application developer checks; not an independent or human audit",
+  "checks": [
+    {
+      "label": "pytest",
+      "exit_code": 0,
+      "evidence": "evidence/improvements-0.3/pytest.txt"
+    },
+    {
+      "label": "frontend",
+      "exit_code": 0,
+      "evidence": "evidence/improvements-0.3/frontend.txt"
+    },
+    {
+      "label": "ruff",
+      "exit_code": 0,
+      "evidence": "evidence/improvements-0.3/ruff.txt"
+    },
+    {
+      "label": "bandit",
+      "exit_code": 0,
+      "evidence": "evidence/improvements-0.3/bandit.txt"
+    }
+  ],
+  "javascript_syntax": "all selfhosted .js files checked with node --check, exit0",
+  "application_sha256": {
+    "app/USER_GUIDE.md": "47cba6862140a48ec5ce5515ec1348da54829468f19569cc2afc23119c7a85b8",
+    "app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "app/guard.py": "d1eda2150e58503114c6cf4ba36d5958aa7e2cfbb496fc0d8026b5c9da4beb77",
+    "app/main.py": "f9bfb3f339a4f44b95151f84746877844f62e0cbc36a4c73c2c4b88ad35a293d",
+    "app/static/index.html": "0bc0f0bb02be0669878f6050df46e2d66865c12a9507619d8f75f7bac988ba9a",
+    "app/static/config.js": "fd7384538d276611392e8a970da913418b2d330556a2a244fa1e4e4c84e1fb43",
+    "app/static/data.js": "c12a15bcb1b73fafcf4a5484562b0ccdf657fc53933596222b79c8fdf9dd53c0",
+    "app/static/style.css": "2f18278b89e88530bfd63e93255cf54725bf3c54ea633429ba4bcb909ee4220f",
+    "app/static/workbench.js": "1820e97ba7919420747e0f2758eafc591a4eab8c1e1a154c811176b7ffe1d8d6",
+    "app/static/diagnostic-chart.js": "dbd4e89c53662deba0f51cbe2409e2eadc1a594693924e844e7ce5527e40c53e"
+  },
+  "external_gates_not_claimed": [
+    "Docker build/runtime",
+    "interactive browser verification",
+    "dependency/secret audit",
+    "remote CI",
+    "release publication"
+  ],
+  "synthetic_data": true
+}

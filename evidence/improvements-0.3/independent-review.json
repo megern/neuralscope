@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "pytest": {
+    "passed": 19,
+    "failed": 0
+  },
+  "confidence": "High for diagnostic indexing, full-holdout summary/worst-case selection and lack of target leakage under the tested perturbation; general model suitability remains unverified.",
+  "scope": [
+    "2200-row synthetic linear case with 1100 held-out observations",
+    "Perturb a held-out label outside the 1000-row diagnostic preview by +500",
+    "Predictions remain unchanged, showing that label did not affect fitting",
+    "Worst case includes original input index outside preview and summary MSE/MAE use all 1100 rows",
+    "Inspected actual-minus-predicted sign, stable worst-case selection, scatter/preview truncation disclosures"
+  ],
+  "issues": [],
+  "limits": "Random holdout assumes independent rows. Linear explanations are associative, not explanations of an arbitrary neural model or causal effects. Permutation standard deviation is not a population confidence interval.",
+  "application": "neuralscope",
+  "version": "0.3.0",
+  "reviewer": "build_enterprise automated independent science/QA reviewer",
+  "independent_author": true,
+  "production_code_changed_by_reviewer": false,
+  "reviewed_at_utc": "2026-10-17T02:36:38.568771+00:00",
+  "source_files_sha256": {
+    "README.md": "2576862337178ce2d2926de7bd0bde3697af9dc47504b40492685529878ac541",
+    "app/USER_GUIDE.md": "47cba6862140a48ec5ce5515ec1348da54829468f19569cc2afc23119c7a85b8",
+    "app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "app/guard.py": "d1eda2150e58503114c6cf4ba36d5958aa7e2cfbb496fc0d8026b5c9da4beb77",
+    "app/main.py": "f9bfb3f339a4f44b95151f84746877844f62e0cbc36a4c73c2c4b88ad35a293d",
+    "app/static/config.js": "fd7384538d276611392e8a970da913418b2d330556a2a244fa1e4e4c84e1fb43",
+    "app/static/data.js": "c12a15bcb1b73fafcf4a5484562b0ccdf657fc53933596222b79c8fdf9dd53c0",
+    "app/static/diagnostic-chart.js": "dbd4e89c53662deba0f51cbe2409e2eadc1a594693924e844e7ce5527e40c53e",
+    "app/static/index.html": "0bc0f0bb02be0669878f6050df46e2d66865c12a9507619d8f75f7bac988ba9a",
+    "app/static/style.css": "2f18278b89e88530bfd63e93255cf54725bf3c54ea633429ba4bcb909ee4220f",
+    "app/static/workbench.js": "1820e97ba7919420747e0f2758eafc591a4eab8c1e1a154c811176b7ffe1d8d6",
+    "docs/USER_GUIDE.md": "47cba6862140a48ec5ce5515ec1348da54829468f19569cc2afc23119c7a85b8",
+    "pyproject.toml": "077c33f37a0602f8734cf161dc727ecf548161bdd1df5213e9adef1b4a4aa5c9"
+  },
+  "reviewed_source_sha256": "231706b33865f937452897b8873f2469710575b01b8bf033dde57f266fb08811",
+  "independent_regressions": "tests/test_independent03_enterprise.py",
+  "test_commands": [
+    "work/.venv/bin/python -m pytest -q (repository cwd)",
+    "node --test tools/test_ui.mjs",
+    "work/.venv/bin/python -m bandit -r app -ll"
+  ],
+  "evidence": {
+    "python": "independent-pytest.txt",
+    "node": "independent-node.txt",
+    "bandit": "independent-bandit.txt"
+  },
+  "node": "PASS; existing real CSV/mapping/canvas logic checks, not a browser render claim",
+  "bandit": "PASS, no configured static findings",
+  "publication": "Reviewer did not commit, push, alter Docker, or claim hosted CI completion.",
+  "independent_regressions_sha256": "11d839bbecd903280879ee547ba0c571e38eb606e024e15e63ea7f77f6464932",
+  "runtime_http": {
+    "status": "PASS",
+    "evidence": "independent-docker-http.json",
+    "note": "Real HTTP checks passed against source-matching served guide."
+  }
+}

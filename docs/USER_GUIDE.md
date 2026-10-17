@@ -1,4 +1,4 @@
-# NeuralScope user guide — v0.2.0
+# NeuralScope user guide — v0.3.0
 
 ## What this tool does
 
@@ -92,6 +92,14 @@ pip-audit --strict
 bandit -r app -ll
 ```
 
-Python tests exercise numerical results and actual HTTP endpoints. Node tests exercise CSV parsing, column mapping, numeric rejection and the synthetic analysis payload. Node22+ is used for development checks; it is not a runtime service dependency. Fresh rebuild evidence is under `evidence/rebuild/`; it records what was run and does not establish unexecuted Docker, GitHub CI or human validation. Configure required CI checks and never merge a failing release.
+Python tests exercise numerical results and actual HTTP endpoints. Node tests exercise CSV parsing, column mapping, numeric rejection and the synthetic analysis payload. Node22+ is used for development checks; it is not a runtime service dependency. Fresh v0.3.0 developer evidence is under `evidence/improvements-0.3/`; it records what was run and does not establish unexecuted Docker, GitHub CI or human validation. Configure required CI checks and never merge a failing release.
 
 MIT license; see LICENSE.
+
+## v0.3.0: held-out error diagnostics
+
+The workbench now adds an actual-versus-predicted scatter with a perfect-agreement reference, absolute-error summary and the20 worst held-out cases. Each row carries the **zero-based original input `row_index`** in API output; UI data-row labels add1 and exclude the CSV header. Residual = actual−predicted, so positive residuals indicate underprediction. Each diagnostic supplies actual, predicted, residual and absolute error.
+
+`diagnostic_summary` computes mean/median/max absolute error and mean residual across **all** held-out rows. `held_out_diagnostics` includes at most the first1,000 observations in seeded holdout order (not sorted chronologically or by error); the summary explicitly marks truncation. The scatter uses this bounded sample. `worst_cases` contains at most20 observations selected across the entire holdout, sorted by absolute error, with stable ordering for ties. These are inspection aids, not outlier labels or a claim of diagnostic representativeness. No held-out target is used for model fitting or preprocessing.
+
+Existing `test_indices`, `predictions`, coefficients and importance remain for compatibility, and all new diagnostics export with the report. No pickle, executable model upload, arbitrary estimator loading, classification or neural-network explanation is added.

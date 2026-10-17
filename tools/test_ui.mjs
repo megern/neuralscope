@@ -128,3 +128,55 @@ test("synthetic CSV produces actual API request", () => {
   }
 });
 console.log(`${checks} frontend checks passed for ${cfg.title}`);
+
+const diagnosticChart = require("../app/static/diagnostic-chart.js");
+test("held-out scatter draws predicted x and actual y with original row identities", () => {
+  const points = [],
+    lines = [];
+  let path = [];
+  const context = {
+    clearRect() {},
+    beginPath() {
+      path = [];
+    },
+    moveTo(x, y) {
+      path.push([x, y]);
+    },
+    lineTo(x, y) {
+      path.push([x, y]);
+    },
+    stroke() {
+      lines.push([...path]);
+    },
+    setLineDash() {},
+    arc(x, y, r) {
+      points.push([x, y, r]);
+    },
+    fill() {},
+    fillText() {},
+  };
+  const canvas = {
+    getContext() {
+      return context;
+    },
+    setAttribute(name, value) {
+      this[name] = value;
+    },
+  };
+  const layout = diagnosticChart.draw(canvas, [
+    { row_index: 8, predicted: 1, actual: 1 },
+    { row_index: 2, predicted: 2, actual: 3 },
+    { row_index: 9, predicted: 3, actual: 2 },
+  ]);
+  assert.deepEqual(
+    layout.map((point) => point.row_index),
+    [8, 2, 9],
+  );
+  assert.equal(points.length, 3);
+  assert.ok(layout[0].x < layout[1].x && layout[1].x < layout[2].x);
+  assert.ok(layout[1].y < layout[2].y);
+  assert.match(canvas["aria-label"], /3 held-out/);
+  assert.throws(() => diagnosticChart.draw(canvas, []), /finite observations/);
+});
+
+console.log(`${checks} final frontend checks passed for ${cfg.title} v0.3.0`);
