@@ -56,7 +56,7 @@ def test_rebuild_static_workbench_and_packaged_guide():
     assert (BASE / "docs/USER_GUIDE.md").read_text() == (
         BASE / "app/USER_GUIDE.md"
     ).read_text()
-    assert app.version == "0.3.0"
+    assert app.version == "0.4.0"
 
 
 def test_rebuild_synthetic_csv_payload_and_replay():

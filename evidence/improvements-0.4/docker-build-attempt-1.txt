@@ -1,0 +1,65 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile:
+#1 transferring dockerfile: 1.69kB 0.4s done
+#1 DONE 0.8s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-alpine@sha256:92abd2ba1bdfb48b1e2ac224b582dd1558d0d4bb11c903b126b5bf9c448fd656
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context:
+#3 transferring context: 98B 0.2s done
+#3 DONE 0.3s
+
+#4 [builder 1/8] FROM docker.io/library/python:3.12-alpine@sha256:92abd2ba1bdfb48b1e2ac224b582dd1558d0d4bb11c903b126b5bf9c448fd656
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 930B 0.2s done
+#5 DONE 0.3s
+
+#6 [stage-1 2/6] RUN apk add --no-cache libgomp=15.2.0-r5 libstdc++=15.2.0-r5
+#6 CACHED
+
+#7 [builder 2/8] RUN apk add --no-cache build-base=0.5-r4 ninja-build=1.13.2-r1 ninja-is-really-ninja=1.13.2-r1
+#7 CACHED
+
+#8 [builder 7/8] COPY tools/build_wheel_lock.py /build/build_wheel_lock.py
+#8 CACHED
+
+#9 [stage-1 5/6] RUN pip install --no-index --find-links=/wheels --require-hashes -r /wheels/built-requirements.lock && cp /wheels/built-requirements.lock /service/built-requirements.lock && rm -rf /wheels && python -m pip uninstall -y pip && rm -rf /usr/local/lib/python3.12/ensurepip && adduser -D -u 10001 runner
+#9 CACHED
+
+#10 [stage-1 3/6] WORKDIR /service
+#10 CACHED
+
+#11 [builder 4/8] COPY requirements.lock requirements-build.lock ./
+#11 CACHED
+
+#12 [builder 6/8] RUN pip wheel --no-cache-dir --no-build-isolation --no-deps --require-hashes --only-binary=:all: --no-binary=scikit-learn --config-settings=compile-args=-j2 --wheel-dir /wheels -r requirements.lock
+#12 CACHED
+
+#13 [builder 5/8] RUN pip install --no-cache-dir --only-binary=:all: --require-hashes -r requirements-build.lock
+#13 CACHED
+
+#14 [builder 8/8] RUN python /build/build_wheel_lock.py /wheels
+#14 CACHED
+
+#15 [stage-1 4/6] COPY --from=builder /wheels /wheels
+#15 CACHED
+
+#16 [builder 3/8] WORKDIR /build
+#16 CACHED
+
+#17 [stage-1 6/6] COPY app ./app
+#17 CACHED
+
+#18 exporting to image
+#18 exporting layers done
+#18 writing image sha256:ec446ddd73018c0c52dd79cc3efc28d274539b0bca16799acc834225da76ab46 0.0s done
+#18 naming to docker.io/library/venturelab-neuralscope:0.4.0 0.0s done
+#18 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/cp7o1mhq505yptf02yqbk1ndo

@@ -112,6 +112,7 @@ function parameters() {
     values[key] = Number(input.value);
   });
   if (cfg.method) values.method = $("param-method").value;
+  values.model = $("param-model").value;
   return values;
 }
 function mapping() {
@@ -284,6 +285,7 @@ function render(result, input) {
   }
   if (cfg.slug === "neuralscope") {
     metrics([
+      ["Fitted model", result.model],
       ["Held-out MSE", format(result.held_out_mse)],
       ["Held-out R²", format(result.held_out_r2)],
       ["Training rows", result.train_rows],
@@ -327,7 +329,7 @@ function render(result, input) {
       ]),
     );
     const first = result.importance[0];
-    interpretation = `${first.feature} has the largest mean held-out permutation MSE increase (${format(first.mse_increase)}). Positive importance means shuffling degraded this model’s predictions; near-zero or negative values can reflect weak signal, redundancy, or sampling noise. Coefficients describe this local linear fit. R² ${result.held_out_r2 === null ? "is undefined for a constant held-out target" : format(result.held_out_r2) + " can be negative when prediction is worse than the held-out target mean"}.`;
+    interpretation = `${first.feature} has the largest mean held-out permutation MSE increase (${format(first.mse_increase)}). Positive importance means shuffling degraded this model’s predictions; near-zero or negative values can reflect weak signal, redundancy, or sampling noise. ${result.model === "random_forest" ? "Forest coefficients are undefined; importance describes this nonlinear predictor." : "Coefficients describe this local linear fit."} R² ${result.held_out_r2 === null ? "is undefined for a constant held-out target" : format(result.held_out_r2) + " can be negative when prediction is worse than the held-out target mean"}.`;
   }
   if (cfg.slug === "timesense") {
     metrics([
@@ -460,7 +462,7 @@ $("export-result").onclick = () => {
   if (lastResult)
     download(cfg.slug + "-report.json", {
       application: cfg.title,
-      version: "0.3.0",
+      version: "0.4.0",
       data_source: $("source-label").textContent,
       created_at: new Date().toISOString(),
       configuration: analysisSnapshot,
@@ -477,3 +479,9 @@ document.querySelectorAll("#mapping,.fields").forEach((container) =>
   }),
 );
 loadCSV(cfg.sample, "Synthetic demonstration dataset");
+
+$("load-nonlinear").onclick = () => {
+  loadCSV(cfg.nonlinear_sample, "Synthetic nonlinear y = x² example");
+  $("param-model").value = "random_forest";
+  $("param-repeats").value = "2";
+};

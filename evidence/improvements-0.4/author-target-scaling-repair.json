@@ -1,0 +1,45 @@
+{
+  "role": "Author repair verification, not independent review",
+  "at_utc": "2026-10-22T14:39:28.269343+00:00",
+  "invocation_correction": "Initial evidence invocation resolved the virtualenv Python symlink to base interpreter and lacked pytest; rerun uses actual virtualenv path. Failed invocation retained separately.",
+  "checks": [
+    {
+      "name": "author-target-scaling-pytest",
+      "exit_code": 0
+    },
+    {
+      "name": "author-target-scaling-node",
+      "exit_code": 0
+    },
+    {
+      "name": "author-target-scaling-bandit",
+      "exit_code": 0
+    }
+  ],
+  "source_files": [
+    {
+      "sha256": "a115fb776f435e6634cf7c51d65811953d32d4145a5abeebf37e4f3e94248c2f",
+      "path": "app/main.py"
+    },
+    {
+      "sha256": "60fa8af3e824a45ec58d2f6792f4c7984700d47a165aa16a9fa6766aa7850191",
+      "path": "tests/test_improvements04.py"
+    },
+    {
+      "sha256": "60b45da688e8cb34cb925e97205ef0a015e384e229e5e0fa3c974ef5d18356f4",
+      "path": "docs/USER_GUIDE.md"
+    },
+    {
+      "sha256": "60b45da688e8cb34cb925e97205ef0a015e384e229e5e0fa3c974ef5d18356f4",
+      "path": "app/USER_GUIDE.md"
+    },
+    {
+      "sha256": "d5a2d2758947c9617f212720650b7d76d86f9763d4c2000abf64274ebe5b32bf",
+      "path": "app/static/config.js"
+    },
+    {
+      "sha256": "73eba288e436f345bc01c694b0e618dae9075798495a1d55ceca731e55bd8507",
+      "path": "app/static/index.html"
+    }
+  ]
+}

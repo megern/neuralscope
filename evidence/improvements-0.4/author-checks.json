@@ -1,0 +1,76 @@
+{
+  "application": "neuralscope",
+  "version": "0.4.0",
+  "recorded_at_utc": "2026-10-22T14:13:46.398723+00:00",
+  "role": "Application author verification, not independent or human review",
+  "checks": [
+    {
+      "name": "pytest",
+      "exit_code": 0
+    },
+    {
+      "name": "frontend",
+      "exit_code": 0
+    },
+    {
+      "name": "ruff",
+      "exit_code": 0
+    },
+    {
+      "name": "bandit",
+      "exit_code": 0
+    }
+  ],
+  "javascript_syntax": "all selfhosted JS checked, exit0",
+  "source_files": [
+    {
+      "sha256": "d14e22046b4281c9d101aa2bf9104e66202008bd2f5d24efd558c046e539baa2",
+      "path": "app/USER_GUIDE.md"
+    },
+    {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "app/__init__.py"
+    },
+    {
+      "sha256": "d1eda2150e58503114c6cf4ba36d5958aa7e2cfbb496fc0d8026b5c9da4beb77",
+      "path": "app/guard.py"
+    },
+    {
+      "sha256": "401f5651b936858e5bb9c1c40ad81201cf5a26d9c4c70d2c3bcd1c6974f53f1d",
+      "path": "app/main.py"
+    },
+    {
+      "sha256": "9ecc27885a911b9558339541ca2aae72a1f0938f9389135e41525147e612ff35",
+      "path": "app/static/config.js"
+    },
+    {
+      "sha256": "c12a15bcb1b73fafcf4a5484562b0ccdf657fc53933596222b79c8fdf9dd53c0",
+      "path": "app/static/data.js"
+    },
+    {
+      "sha256": "dbd4e89c53662deba0f51cbe2409e2eadc1a594693924e844e7ce5527e40c53e",
+      "path": "app/static/diagnostic-chart.js"
+    },
+    {
+      "sha256": "508a5deb34b268564809013de35d35bac694f5e8d48df0439cbd9f83ca2a0d21",
+      "path": "app/static/index.html"
+    },
+    {
+      "sha256": "2f18278b89e88530bfd63e93255cf54725bf3c54ea633429ba4bcb909ee4220f",
+      "path": "app/static/style.css"
+    },
+    {
+      "sha256": "3bc4fe0dcf0c0dfbe6a30a688987747602a8c960869fa81ea5fb2d886c3b160e",
+      "path": "app/static/workbench.js"
+    }
+  ],
+  "runtime_gates_not_claimed": [
+    "Docker build/runtime",
+    "browser interaction",
+    "API authentication and admission-control changes assigned to root after this checkpoint",
+    "independent QA",
+    "dependency/secret audits",
+    "CI and publication"
+  ],
+  "synthetic_examples": true
+}

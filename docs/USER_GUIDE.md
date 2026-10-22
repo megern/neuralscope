@@ -1,8 +1,8 @@
-# NeuralScope user guide — v0.3.0
+# NeuralScope user guide — v0.4.0
 
 ## What this tool does
 
-Train a local ordinary-least-squares regression model and inspect repeated held-out permutation importance and original-unit coefficients.
+Train a local OLS or bounded random-forest regression model and inspect repeated held-out permutation importance and original-unit coefficients.
 
 Use case: An analyst has numeric independent observations and a numeric target, and wants a reproducible baseline with an understandable explanation of which columns affect held-out accuracy.
 
@@ -48,7 +48,7 @@ target,signal,noise
 7.6,1.4,0.4
 ```
 
-Input requirements: At least20 rows, a finite numeric target, and1–50 numeric features. Training rows must outnumber intercept plus features, and the training design must be full rank. Target must not be selected as a feature. Missing/categorical values are rejected rather than silently encoded.
+Input requirements: At least20 rows, a finite numeric target, and1–50 numeric features. Training rows must outnumber intercept plus features, and the OLS training design must be full rank (RF can fit redundant features). Target must not be selected as a feature. Missing/categorical values are rejected rather than silently encoded.
 
 ## Methods
 
@@ -73,7 +73,7 @@ See examples/synthetic.json for a valid complete regression request; at least20 
 
 ## Assumptions and limits
 
-Random split assumes independent observations; it is unsuitable for autocorrelated sequences, grouped observations or repeated entities without a justified split strategy. Correlated features can obscure individual importance. Explanations describe this fitted linear baseline, not causation or an arbitrary uploaded neural network. No opaque model loading, classification, SHAP or model registry is implemented.
+Random split assumes independent observations; it is unsuitable for autocorrelated sequences, grouped observations or repeated entities without a justified split strategy. Correlated features can obscure individual importance. Explanations describe the selected locally fitted regressor, not causation or an arbitrary uploaded neural network. No opaque model loading, classification, SHAP or model registry is implemented.
 
 These are bounded local research tools. Synthetic fixtures do not establish external scientific validity. No domain expert or human audit is claimed. For network exposure, configure authentication, HTTPS, rate limits and deployment concurrency/memory bounds. Defaults bind to localhost and containers run without root privileges.
 
@@ -92,14 +92,26 @@ pip-audit --strict
 bandit -r app -ll
 ```
 
-Python tests exercise numerical results and actual HTTP endpoints. Node tests exercise CSV parsing, column mapping, numeric rejection and the synthetic analysis payload. Node22+ is used for development checks; it is not a runtime service dependency. Fresh v0.3.0 developer evidence is under `evidence/improvements-0.3/`; it records what was run and does not establish unexecuted Docker, GitHub CI or human validation. Configure required CI checks and never merge a failing release.
+Python tests exercise numerical results and actual HTTP endpoints. Node tests exercise CSV parsing, column mapping, numeric rejection and the synthetic analysis payload. Node22+ is used for development checks; it is not a runtime service dependency. Fresh v0.4.0 developer evidence is under `evidence/improvements-0.4/`; it records what was run and does not establish unexecuted Docker, GitHub CI or human validation. Configure required CI checks and never merge a failing release.
 
 MIT license; see LICENSE.
 
-## v0.3.0: held-out error diagnostics
+## v0.4.0: held-out error diagnostics
 
 The workbench now adds an actual-versus-predicted scatter with a perfect-agreement reference, absolute-error summary and the20 worst held-out cases. Each row carries the **zero-based original input `row_index`** in API output; UI data-row labels add1 and exclude the CSV header. Residual = actual−predicted, so positive residuals indicate underprediction. Each diagnostic supplies actual, predicted, residual and absolute error.
 
 `diagnostic_summary` computes mean/median/max absolute error and mean residual across **all** held-out rows. `held_out_diagnostics` includes at most the first1,000 observations in seeded holdout order (not sorted chronologically or by error); the summary explicitly marks truncation. The scatter uses this bounded sample. `worst_cases` contains at most20 observations selected across the entire holdout, sorted by absolute error, with stable ordering for ties. These are inspection aids, not outlier labels or a claim of diagnostic representativeness. No held-out target is used for model fitting or preprocessing.
 
 Existing `test_indices`, `predictions`, coefficients and importance remain for compatibility, and all new diagnostics export with the report. No pickle, executable model upload, arbitrary estimator loading, classification or neural-network explanation is added.
+
+## v0.4.0: nonlinear random forest
+
+Choose **Random forest (bounded CPU)** instead of default OLS. Set tree count, maximum depth and minimum leaf rows. The same seeded holdout, repeated held-out permutation importance, actual/predicted scatter, errors and worst-row diagnostics apply. No held-out target enters fitting. RF centers features and divides by training-only maximum absolute deviations before fitting and prediction; constant training columns use scale1. This avoids small-unit feature differences collapsing at tree split tolerances. OLS retains its original training-only scaling. A forest has no linear coefficient/intercept: those fields are explicitly null. Do not interpret undefined coefficients as zero influence.
+
+RF is scikit-learn RandomForestRegressor, n_jobs=1, seeded deterministically. Limits:3,000 rows,20 features,10–100 trees, depth2–12, leaf minimum1–50. Fit-work proxy rows×features×trees×depth must not exceed20million; permutation-work proxy heldout_rows×features×repeats×trees must not exceed200,000. RF numeric features/targets must have magnitude≤1e20 for safe tree input conversion. These are conservative workload proxies, not hard wall-clock guarantees. If rejected, reduce data/columns/trees/depth/repeats; never silently sample data to fit a budget.
+
+The synthetic nonlinear example has outcome=x². It demonstrates a relation that OLS cannot represent directly; a held-out RF test checks genuinely nonlinear predictive accuracy. It does not establish real-world model quality. Trees extrapolate poorly outside observed training support, feature correlation affects permutation rankings, and random independent-row holdout remains unsuitable for chronological/grouped data. No executable model/pickle upload, neural model inspection or paid calls are added.
+
+Load `examples/synthetic-nonlinear.csv`, select feature x and target y, choose random forest and run. API request: `examples/synthetic-forest.json`. See [official RandomForestRegressor documentation](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html) and [held-out permutation importance guidance](https://scikit-learn.org/stable/modules/permutation_importance.html).
+
+The forest centers and range-scales both features and target using training rows only, then restores predictions to original target units. Target normalization avoids tree impurity tolerances depending on target units. Held-out R² normalizes target magnitude before squaring; it is null only for an exactly constant held-out target. MSE and residuals remain in original target units.

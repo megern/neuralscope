@@ -1,0 +1,57 @@
+..FF                                                                     [100%]
+=================================== FAILURES ===================================
+_______ test_forest_tiny_outcome_units_keep_nonlinear_fit_and_defined_r2 _______
+
+    def test_forest_tiny_outcome_units_keep_nonlinear_fit_and_defined_r2():
+        x = np.linspace(-2, 2, 120)
+        y = x * x
+        response = client.post(
+            "/analyze",
+            json={
+                "features": x[:, None].tolist(),
+                "target": (y * 1e-8).tolist(),
+                "model": "random_forest",
+                "trees": 10,
+                "repeats": 1,
+                "max_depth": 6,
+                "seed": 42,
+            },
+        )
+        assert response.status_code == 200, response.text
+        result = response.json()
+>       assert result["held_out_r2"] is not None and result["held_out_r2"] > 0.9
+E       assert (None is not None)
+
+tests/test_independent04_enterprise.py:78: AssertionError
+_______ test_ols_nonconstant_small_outcome_has_defined_unit_invariant_r2 _______
+
+    def test_ols_nonconstant_small_outcome_has_defined_unit_invariant_r2():
+        x = np.linspace(-2, 2, 40)
+        response = client.post(
+            "/analyze",
+            json={
+                "features": x[:, None].tolist(),
+                "target": (x * 1e-8).tolist(),
+                "model": "ols",
+                "repeats": 1,
+            },
+        )
+        assert response.status_code == 200, response.text
+>       assert response.json()["held_out_r2"] == pytest.approx(1, abs=1e-10)
+E       assert None == 1 ± 1.0e-10
+E         
+E         comparison failed
+E         Obtained: None
+E         Expected: 1 ± 1.0e-10
+
+tests/test_independent04_enterprise.py:93: AssertionError
+=============================== warnings summary ===============================
+../../../work/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/a2/Documents/Codex/2026-10-13/ai-open-source-venture-lab-36/work/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_independent04_enterprise.py::test_forest_tiny_outcome_units_keep_nonlinear_fit_and_defined_r2
+FAILED tests/test_independent04_enterprise.py::test_ols_nonconstant_small_outcome_has_defined_unit_invariant_r2
+2 failed, 2 passed, 1 warning in 4.44s

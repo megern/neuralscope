@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>NeuralScope · Research workbench</title>
     <link rel="stylesheet" href="/static/style.css" />
+    <script src="/static/access.js"></script>
     <script src="/static/config.js" defer></script>
     <script src="/static/data.js" defer></script>
     <script src="/static/diagnostic-chart.js" defer></script>
@@ -12,7 +13,7 @@
   </head>
   <body>
     <header>
-      <span class="badge">Local CPU research · v0.3.0</span>
+      <span class="badge">Local CPU research · v0.4.0</span>
       <h1>NeuralScope</h1>
       <p>Train a transparent local model and explain its held-out behavior.</p>
       <a href="/docs">API documentation</a> · <a href="/guide">User guide</a>
@@ -20,10 +21,12 @@
     <main>
       <section>
         <h2>1. Bring your data</h2>
-        <p>Which columns does this linear model rely on?</p>
+        <p>Which columns does the selected model rely on?</p>
         <button id="load-example" class="secondary">
           Load synthetic example</button
         ><button id="sample-csv" class="secondary">Download sample CSV</button
+        ><button id="load-nonlinear" class="secondary">
+          Load nonlinear synthetic example (RF)</button
         ><label for="csv-file">Import CSV (up to 2 MiB)</label
         ><input id="csv-file" type="file" accept=".csv,text/csv" />
         <p id="source-label" class="hint"></p>
@@ -34,6 +37,49 @@
         <h2>2. Map columns and settings</h2>
         <div id="mapping"></div>
         <div class="fields">
+          <div>
+            <label for="param-trees">Forest trees (10–100)</label
+            ><input
+              type="number"
+              id="param-trees"
+              value="50"
+              min="10"
+              max="100"
+              step="any"
+              required
+            />
+          </div>
+          <div>
+            <label for="param-max_depth">Forest maximum depth (2–12)</label
+            ><input
+              type="number"
+              id="param-max_depth"
+              value="8"
+              min="2"
+              max="12"
+              step="any"
+              required
+            />
+          </div>
+          <div>
+            <label for="param-min_samples_leaf">Forest minimum leaf rows</label
+            ><input
+              type="number"
+              id="param-min_samples_leaf"
+              value="2"
+              min="1"
+              max="50"
+              step="any"
+              required
+            />
+          </div>
+          <div>
+            <label for="param-model">Regression model</label
+            ><select id="param-model">
+              <option value="ols">Ordinary least squares</option>
+              <option value="random_forest">Random forest (bounded CPU)</option>
+            </select>
+          </div>
           <div>
             <label for="param-test_fraction">Held-out fraction</label
             ><input
@@ -72,9 +118,9 @@
           </div>
         </div>
         <p class="hint">
-          Ordinary least squares with preprocessing fitted on training rows
-          only. Random holdout assumes independent rows; this does not explain
-          an uploaded neural network.
+          OLS or bounded random forest, fitted on training rows only. Random
+          holdout assumes independent rows; this does not explain an uploaded
+          neural network.
         </p>
         <button id="run">Train and explain</button>
         <div id="status" class="status" role="status" aria-live="polite"></div>

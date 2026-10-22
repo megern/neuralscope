@@ -1,4 +1,6 @@
+from .access import AccessControl
 import math
+from typing import Literal
 from .guard import InputGuard
 import numpy as np
 from fastapi import FastAPI, HTTPException
@@ -32,10 +34,33 @@ class Request(BaseModel):
     seed: int = Field(default=42, ge=0, le=4294967295)
     repeats: int = Field(default=10, ge=1, le=100)
 
+    model: Literal["ols", "random_forest"] = "ols"
+    trees: int = Field(default=50, ge=10, le=100)
+    max_depth: int = Field(default=8, ge=2, le=12)
+    min_samples_leaf: int = Field(default=2, ge=1, le=50)
+
     @model_validator(mode="after")
     def valid(self):
         matrix(self.features)
         finite(self.target)
+        if self.model == "random_forest":
+            rows, width = len(self.features), len(self.features[0])
+            test_rows = max(2, int(rows * self.test_fraction))
+            if (
+                rows > 3000
+                or width > 20
+                or (rows * width * self.trees * self.max_depth) > 20_000_000
+                or (test_rows * width * self.repeats * self.trees) > 200_000
+            ):
+                raise ValueError(
+                    "random forest exceeds CPU budget: max 3000 rows/20 features, fit work 20 million and permutation work 200 thousand; reduce rows, columns, trees, depth or repeats"
+                )
+            if any(abs(v) > 1e20 for row in self.features for v in row) or any(
+                abs(v) > 1e20 for v in self.target
+            ):
+                raise ValueError(
+                    "rescale random forest inputs/target to magnitude at most 1e20"
+                )
         if len(self.features) != len(self.target):
             raise ValueError("row counts must match")
         if self.feature_names is not None and (
@@ -52,21 +77,62 @@ def analyze(req: Request):
     order = rng.permutation(len(y))
     size = max(2, int(len(y) * req.test_fraction))
     test, train = order[:size], order[size:]
-    if len(train) <= x.shape[1] + 1:
-        raise ValueError("training data must have more rows than model parameters")
-    mean, scale = x[train].mean(0), x[train].std(0)
-    scale = np.where(scale > 1e-12, scale, 1)
-    a = np.column_stack([np.ones(len(train)), (x[train] - mean) / scale])
-    if np.linalg.matrix_rank(a) < a.shape[1]:
-        raise ValueError("features are constant or collinear in training data")
-    beta = np.linalg.lstsq(a, y[train], rcond=None)[0]
+    beta = None
+    if req.model == "ols":
+        if len(train) <= x.shape[1] + 1:
+            raise ValueError("training data must have more rows than model parameters")
+        mean, scale = x[train].mean(0), x[train].std(0)
+        scale = np.where(scale > 1e-12, scale, 1)
+        a = np.column_stack([np.ones(len(train)), (x[train] - mean) / scale])
+        if np.linalg.matrix_rank(a) < a.shape[1]:
+            raise ValueError("features are constant or collinear in training data")
+        beta = np.linalg.lstsq(a, y[train], rcond=None)[0]
 
-    def predict(data):
-        return beta[0] + ((data - mean) / scale) @ beta[1:]
+        def predict(data):
+            return beta[0] + ((data - mean) / scale) @ beta[1:]
+
+    else:
+        from sklearn.ensemble import RandomForestRegressor
+
+        forest = RandomForestRegressor(
+            n_estimators=req.trees,
+            max_depth=req.max_depth,
+            min_samples_leaf=req.min_samples_leaf,
+            n_jobs=1,
+            random_state=req.seed,
+        )
+        forest_center = x[train].mean(axis=0)
+        forest_range = np.max(np.abs(x[train] - forest_center), axis=0)
+        forest_scale = np.where(forest_range > 0, forest_range, 1.0)
+        target_center = float(y[train].mean())
+        target_range = float(np.max(np.abs(y[train] - target_center)))
+        target_scale = target_range if target_range > 0 else 1.0
+        forest.fit(
+            (x[train] - forest_center) / forest_scale,
+            (y[train] - target_center) / target_scale,
+        )
+
+        def predict(data):
+            return (
+                forest.predict((data - forest_center) / forest_scale) * target_scale
+                + target_center
+            )
 
     prediction = predict(x[test])
     mse = float(np.mean((prediction - y[test]) ** 2))
-    variance = float(np.sum((y[test] - y[test].mean()) ** 2))
+    # Normalize before squaring so changing target units cannot erase variance.
+    target_magnitude = float(np.max(np.abs(y[test])))
+    if np.all(y[test] == y[test][0]):
+        r2 = None
+    else:
+        normalized_target = y[test] / target_magnitude
+        variance = float(np.sum((normalized_target - normalized_target.mean()) ** 2))
+        if variance == 0:
+            raise ValueError(
+                "held-out target variation cannot be represented; rescale target"
+            )
+        squared_error = float(np.sum(((prediction - y[test]) / target_magnitude) ** 2))
+        r2 = 1 - squared_error / variance
     importance = []
     names = req.feature_names or [f"feature_{i}" for i in range(x.shape[1])]
     for j, name in enumerate(names):
@@ -80,7 +146,9 @@ def analyze(req: Request):
                 "feature": name,
                 "mse_increase": float(np.mean(scores)),
                 "std": float(np.std(scores)),
-                "coefficient": float(beta[j + 1] / scale[j]),
+                "coefficient": (
+                    float(beta[j + 1] / scale[j]) if beta is not None else None
+                ),
             }
         )
     residuals = y[test] - prediction
@@ -98,6 +166,17 @@ def analyze(req: Request):
     diagnostic_limit = 1000
     worst = np.argsort(-absolute_errors, kind="stable")[:20]
     return {
+        "model": req.model,
+        "model_configuration": (
+            {
+                "trees": req.trees,
+                "max_depth": req.max_depth,
+                "min_samples_leaf": req.min_samples_leaf,
+                "n_jobs": 1,
+            }
+            if req.model == "random_forest"
+            else {}
+        ),
         "diagnostic_summary": {
             "evaluated_rows": len(test),
             "reported_rows": min(len(test), diagnostic_limit),
@@ -114,22 +193,20 @@ def analyze(req: Request):
         ],
         "worst_cases": [diagnostic(int(i)) for i in worst],
         "held_out_mse": mse,
-        "held_out_r2": (
-            1 - float(np.sum((prediction - y[test]) ** 2)) / variance
-            if variance > 1e-12
-            else None
-        ),
+        "held_out_r2": r2,
         "train_rows": len(train),
         "test_rows": len(test),
         "test_indices": test.tolist(),
         "predictions": prediction.tolist(),
-        "intercept": float(beta[0] - mean @ (beta[1:] / scale)),
+        "intercept": (
+            float(beta[0] - mean @ (beta[1:] / scale)) if beta is not None else None
+        ),
         "importance": sorted(importance, key=lambda i: i["mse_increase"], reverse=True),
-        "limitations": "Random holdout assumes independent observations; use chronological evaluation for time series. Linear model explains association, not causation. Correlated features can dilute permutation importance. All preprocessing is fit only on training rows.",
+        "limitations": "Random holdout assumes independent observations; use chronological evaluation for time series. Models explain predictive association, not causation. Random forest has no linear coefficients; training-only feature and target centering/range scaling fits the trees; predictions and errors use original target units. Correlated features can dilute permutation importance. All preprocessing is fit only on training rows.",
     }
 
 
-app = FastAPI(title="NeuralScope", version="0.3.0")
+app = FastAPI(title="NeuralScope", version="0.4.0")
 
 
 STATIC = Path(__file__).parent / "static"
@@ -175,3 +252,6 @@ def run_analysis(req: Request):
 
 
 app.add_middleware(InputGuard)
+
+
+app.add_middleware(AccessControl)
