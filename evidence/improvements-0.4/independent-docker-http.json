@@ -1,0 +1,67 @@
+{
+  "application": "neuralscope",
+  "version": "0.4.0",
+  "reviewer": "build_enterprise automated independent reviewer",
+  "checked_at_utc": "2026-10-22T17:55:40.571406+00:00",
+  "url": "http://127.0.0.1:18408",
+  "synthetic": true,
+  "checks": [
+    "Actual final container HTTP health is ok; current root inspection confirms native health healthy on exact matching image/container IDs",
+    "Current0.4 API version, root HTML, guide and every static file match reviewed source bytes",
+    "Final Alpine container performs actual bounded RF inference on tiny-unit nonlinear targets with R2>.9, original-unit diagnostics and no fake linear coefficients",
+    "Over-budget RF request rejects with actual HTTP422"
+  ],
+  "scope": "Actual HTTP feature/error checks and served-byte matching. Backend container matching relies on accepted root-generated runtime source proof, independently checked against every current local app file. Not a browser-rendering or publication claim.",
+  "backend_freshness": {
+    "status": "PASS",
+    "root_proof_path": "outputs/evidence/improvements-0.4/runtime-source.json",
+    "root_proof_sha256": "e5392418dda519a74650eb84e06dd5fca9114b5cfb7b5ed4a8f1b719ba91d3b8",
+    "container": "9baffe3376bbb7de719f041932d93e2bc3db3e57072747ad249f5c4cd0d37337",
+    "application_files_verified": 12,
+    "method": "Every current app file hash and complete file set equals accepted root proof of the running container.",
+    "runtime_config_evidence": "docker-runtime.json",
+    "runtime_config_sha256": "960396038d6a0e8f4f3a0421316a61df337fcc68d1e5d1ab26547e2804ed2fba",
+    "image_id": "sha256:ec446ddd73018c0c52dd79cc3efc28d274539b0bca16799acc834225da76ab46",
+    "native_health_status": "healthy",
+    "native_health_scope": "Root runtime inspection reports healthy on this exact container/image; independent reviewer checks same current proof and actual HTTP health separately."
+  },
+  "served_assets_sha256": [
+    {
+      "sha256": "f7a4a09a26b83052edc956cf886195c0f4687b0661a166320f460f3e3ccad0d5",
+      "path": "/static/access.js"
+    },
+    {
+      "sha256": "d5a2d2758947c9617f212720650b7d76d86f9763d4c2000abf64274ebe5b32bf",
+      "path": "/static/config.js"
+    },
+    {
+      "sha256": "c12a15bcb1b73fafcf4a5484562b0ccdf657fc53933596222b79c8fdf9dd53c0",
+      "path": "/static/data.js"
+    },
+    {
+      "sha256": "dbd4e89c53662deba0f51cbe2409e2eadc1a594693924e844e7ce5527e40c53e",
+      "path": "/static/diagnostic-chart.js"
+    },
+    {
+      "sha256": "73eba288e436f345bc01c694b0e618dae9075798495a1d55ceca731e55bd8507",
+      "path": "/static/index.html"
+    },
+    {
+      "sha256": "2f18278b89e88530bfd63e93255cf54725bf3c54ea633429ba4bcb909ee4220f",
+      "path": "/static/style.css"
+    },
+    {
+      "sha256": "3bc4fe0dcf0c0dfbe6a30a688987747602a8c960869fa81ea5fb2d886c3b160e",
+      "path": "/static/workbench.js"
+    },
+    {
+      "sha256": "73eba288e436f345bc01c694b0e618dae9075798495a1d55ceca731e55bd8507",
+      "path": "/"
+    },
+    {
+      "sha256": "60b45da688e8cb34cb925e97205ef0a015e384e229e5e0fa3c974ef5d18356f4",
+      "path": "/guide"
+    }
+  ],
+  "status": "PASS"
+}

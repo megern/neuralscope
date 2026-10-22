@@ -127,7 +127,6 @@ test("synthetic CSV produces actual API request", () => {
     );
   }
 });
-console.log(`${checks} frontend checks passed for ${cfg.title}`);
 
 const diagnosticChart = require("../app/static/diagnostic-chart.js");
 test("held-out scatter draws predicted x and actual y with original row identities", () => {
@@ -179,4 +178,46 @@ test("held-out scatter draws predicted x and actual y with original row identiti
   assert.throws(() => diagnosticChart.draw(canvas, []), /finite observations/);
 });
 
-console.log(`${checks} final frontend checks passed for ${cfg.title} v0.3.0`);
+test("new scientific option is wired through the actual parameter collector", () => {
+  const source = fs.readFileSync(
+    new URL("../app/static/workbench.js", import.meta.url),
+    "utf8",
+  );
+  const collector = source.slice(
+    source.indexOf("function parameters()"),
+    source.indexOf("function mapping()"),
+  );
+  const fields = Object.fromEntries(
+    cfg.params.map(([name, , value]) => [
+      "param-" + name,
+      {
+        value: String(value),
+        checkValidity: () => true,
+        labels: [{ textContent: name }],
+      },
+    ]),
+  );
+  fields["include-ipw"] = { checked: true };
+  fields["param-model"] = { value: "random_forest" };
+  const settings = vm.runInNewContext(collector + ";parameters()", {
+    cfg,
+    $: (id) => fields[id],
+  });
+  if (cfg.slug === "causallab") {
+    assert.equal(settings.include_ipw, true);
+    assert.equal(settings.propensity_clip, 0.02);
+  } else {
+    assert.equal(settings.model, "random_forest");
+    assert.equal(settings.trees, 50);
+  }
+});
+
+test("nonlinear UI example contains actual quadratic targets", () => {
+  const parsed = parseCSV(cfg.nonlinear_sample),
+    x = numericColumn(parsed, "x"),
+    y = numericColumn(parsed, "target");
+  assert.equal(x.length, 100);
+  x.forEach((value, i) => assert.ok(Math.abs(y[i] - value * value) < 1e-10));
+});
+
+console.log(`${checks} frontend checks passed for ${cfg.title} v0.4.0`);

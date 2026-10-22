@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "neuralscope"
-version = "0.3.0"
-description = "Interpretable local linear regression and repeated held-out permutation importance."
+version = "0.4.0"
+description = "Held-out OLS and random-forest regression diagnostics."
 requires-python = ">=3.12"
 license = "MIT"
-dependencies = ["fastapi==0.143.0", "pydantic==2.14.1", "uvicorn==0.54.0", "numpy==2.5.4"]
+dependencies = ["fastapi==0.143.0", "pydantic==2.14.1", "uvicorn==0.54.0", "numpy==2.5.4", "scikit-learn==1.9.1"]
 
 [project.optional-dependencies]
 dev = ["pytest==9.1.1", "httpx==0.28.1", "pip-audit==2.10.1", "bandit==1.9.4"]

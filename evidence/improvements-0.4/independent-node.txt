@@ -1,0 +1,75 @@
+TAP version 13
+# Subtest: Default page does not attach a credential or change request bodies
+ok 1 - Default page does not attach a credential or change request bodies
+  ---
+  duration_ms: 12.480417
+  ...
+# Subtest: Actual key form affects same-origin requests only and clears its field
+ok 2 - Actual key form affects same-origin requests only and clears its field
+  ---
+  duration_ms: 1.556333
+  ...
+# Subtest: Explicit authorization and Request headers are preserved
+ok 3 - Explicit authorization and Request headers are preserved
+  ---
+  duration_ms: 1.02075
+  ...
+# Subtest: Clear and page reload remove the credential
+ok 4 - Clear and page reload remove the credential
+  ---
+  duration_ms: 0.640708
+  ...
+# Subtest: Cross-constructor external Request must never receive the server access key
+ok 5 - Cross-constructor external Request must never receive the server access key
+  ---
+  duration_ms: 13.767542
+  ...
+# Subtest: Protocol-relative external URL and suffix-lookalike origin never receive key
+ok 6 - Protocol-relative external URL and suffix-lookalike origin never receive key
+  ---
+  duration_ms: 0.800334
+  ...
+# Subtest: Own URL property on a genuine external Request cannot spoof its destination
+ok 7 - Own URL property on a genuine external Request cannot spoof its destination
+  ---
+  duration_ms: 0.578375
+  ...
+# Subtest: Own href property on external URL and unknown objects cannot obtain implicit credential
+ok 8 - Own href property on external URL and unknown objects cannot obtain implicit credential
+  ---
+  duration_ms: 0.400166
+  ...
+# PASS quoted-empty single-column record preserved then rejected as missing numeric
+# PASS trailing quoted-empty record at EOF preserved
+# PASS whitespace-only field is data, not a blank physical line
+# PASS truly empty physical lines ignored while delimiter-empty rows retained
+# PASS quoted comma, multiline, escaped quote and CRLF
+# PASS BOM header parsed
+# PASS duplicate headers rejected
+# PASS ragged row actionable
+# PASS unclosed quoted field rejected
+# PASS empty matrix row not silently dropped
+# PASS blank physical lines ignored
+# PASS missing numeric value is an error
+# PASS nonfinite and oversized numbers rejected
+# PASS scientific notation and decimal values
+# PASS hostile text remains plain CSV text
+# PASS synthetic CSV produces actual API request
+# PASS held-out scatter draws predicted x and actual y with original row identities
+# PASS new scientific option is wired through the actual parameter collector
+# PASS nonlinear UI example contains actual quadratic targets
+# 19 frontend checks passed for NeuralScope v0.4.0
+# Subtest: tools/test_ui.mjs
+ok 3 - tools/test_ui.mjs
+  ---
+  duration_ms: 66.031333
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 87.491541

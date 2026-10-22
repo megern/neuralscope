@@ -1,0 +1,165 @@
+{
+  "synthetic": true,
+  "http_status": 200,
+  "invalid_input_status": 422,
+  "latency_ms": [
+    779.475084040314,
+    367.7063749637455,
+    446.4260421227664
+  ],
+  "result": {
+    "model": "ols",
+    "model_configuration": {},
+    "diagnostic_summary": {
+      "evaluated_rows": 7,
+      "reported_rows": 7,
+      "diagnostic_limit": 1000,
+      "truncated": false,
+      "mean_absolute_error": 6.090366306515144e-15,
+      "median_absolute_error": 3.552713678800501e-15,
+      "max_absolute_error": 1.4210854715202004e-14,
+      "mean_residual": -5.075305255429287e-15,
+      "residual_definition": "actual minus predicted; positive values mean underprediction"
+    },
+    "held_out_diagnostics": [
+      {
+        "row_index": 29,
+        "actual": 89.0,
+        "predicted": 89.00000000000001,
+        "residual": -1.4210854715202004e-14,
+        "absolute_error": 1.4210854715202004e-14
+      },
+      {
+        "row_index": 16,
+        "actual": 50.0,
+        "predicted": 50.00000000000001,
+        "residual": -7.105427357601002e-15,
+        "absolute_error": 7.105427357601002e-15
+      },
+      {
+        "row_index": 7,
+        "actual": 23.0,
+        "predicted": 23.000000000000004,
+        "residual": -3.552713678800501e-15,
+        "absolute_error": 3.552713678800501e-15
+      },
+      {
+        "row_index": 25,
+        "actual": 77.0,
+        "predicted": 77.00000000000001,
+        "residual": -1.4210854715202004e-14,
+        "absolute_error": 1.4210854715202004e-14
+      },
+      {
+        "row_index": 24,
+        "actual": 74.0,
+        "predicted": 74.0,
+        "residual": 0.0,
+        "absolute_error": 0.0
+      },
+      {
+        "row_index": 22,
+        "actual": 68.0,
+        "predicted": 68.0,
+        "residual": 0.0,
+        "absolute_error": 0.0
+      },
+      {
+        "row_index": 5,
+        "actual": 17.0,
+        "predicted": 16.999999999999996,
+        "residual": 3.552713678800501e-15,
+        "absolute_error": 3.552713678800501e-15
+      }
+    ],
+    "worst_cases": [
+      {
+        "row_index": 29,
+        "actual": 89.0,
+        "predicted": 89.00000000000001,
+        "residual": -1.4210854715202004e-14,
+        "absolute_error": 1.4210854715202004e-14
+      },
+      {
+        "row_index": 25,
+        "actual": 77.0,
+        "predicted": 77.00000000000001,
+        "residual": -1.4210854715202004e-14,
+        "absolute_error": 1.4210854715202004e-14
+      },
+      {
+        "row_index": 16,
+        "actual": 50.0,
+        "predicted": 50.00000000000001,
+        "residual": -7.105427357601002e-15,
+        "absolute_error": 7.105427357601002e-15
+      },
+      {
+        "row_index": 7,
+        "actual": 23.0,
+        "predicted": 23.000000000000004,
+        "residual": -3.552713678800501e-15,
+        "absolute_error": 3.552713678800501e-15
+      },
+      {
+        "row_index": 5,
+        "actual": 17.0,
+        "predicted": 16.999999999999996,
+        "residual": 3.552713678800501e-15,
+        "absolute_error": 3.552713678800501e-15
+      },
+      {
+        "row_index": 24,
+        "actual": 74.0,
+        "predicted": 74.0,
+        "residual": 0.0,
+        "absolute_error": 0.0
+      },
+      {
+        "row_index": 22,
+        "actual": 68.0,
+        "predicted": 68.0,
+        "residual": 0.0,
+        "absolute_error": 0.0
+      }
+    ],
+    "held_out_mse": 6.851820433919646e-29,
+    "held_out_r2": 1.0,
+    "train_rows": 23,
+    "test_rows": 7,
+    "test_indices": [
+      29,
+      16,
+      7,
+      25,
+      24,
+      22,
+      5
+    ],
+    "predictions": [
+      89.00000000000001,
+      50.00000000000001,
+      23.000000000000004,
+      77.00000000000001,
+      74.0,
+      68.0,
+      16.999999999999996
+    ],
+    "intercept": 1.999999999999993,
+    "importance": [
+      {
+        "feature": "trend",
+        "mse_increase": 1571.9142857142858,
+        "std": 561.0937867692177,
+        "coefficient": 3.0000000000000004
+      },
+      {
+        "feature": "noise",
+        "mse_increase": 2.884977024808268e-30,
+        "std": 1.8550144279886605e-29,
+        "coefficient": 8.416176382284936e-16
+      }
+    ],
+    "limitations": "Random holdout assumes independent observations; use chronological evaluation for time series. Models explain predictive association, not causation. Random forest has no linear coefficients; training-only feature and target centering/range scaling fits the trees; predictions and errors use original target units. Correlated features can dilute permutation importance. All preprocessing is fit only on training rows."
+  }
+}
